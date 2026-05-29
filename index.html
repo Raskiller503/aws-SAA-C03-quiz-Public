@@ -1,9 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta http-equiv="refresh" content="0; url=quiz-app.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS SAA-C03 学习与刷题</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+               'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, #232F3E 0%, #1a2334 100%);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.wrap { max-width: 900px; width: 100%; text-align: center; }
+h1 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+h1 span { color: #FF9900; }
+.subtitle {
+  color: #94a3b8;
+  font-size: 16px;
+  margin-bottom: 48px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s, border-color 0.25s, background 0.25s;
+  text-align: left;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #FF9900;
+  background: rgba(255,153,0,0.08);
+}
+.card .icon { font-size: 38px; margin-bottom: 14px; }
+.card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.card p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+.foot {
+  margin-top: 48px;
+  color: #64748b;
+  font-size: 13px;
+}
+.foot a { color: #94a3b8; }
+</style>
 </head>
 <body>
-<a href="quiz-app.html">AWS SAA-C03 刷题助手</a>
+<div class="wrap">
+  <h1>AWS <span>SAA-C03</span></h1>
+  <p class="subtitle">Solutions Architect Associate · 学习与刷题</p>
+  <div class="cards">
+    <a class="card" href="study.html">
+      <div class="icon">📚</div>
+      <h2>学习框架</h2>
+      <p>13 章系统化教程,从 CLF 进阶视角带你重建 AWS 知识体系 — 决策树、对比表、答题套路全收录。</p>
+    </a>
+    <a class="card" href="quiz-app.html">
+      <div class="icon">📝</div>
+      <h2>刷题助手</h2>
+      <p>1019 道双语题库,支持顺序/随机/章节/模拟考试,错题本、笔记、GitHub Gist 同步。</p>
+    </a>
+  </div>
+  <p class="foot">
+    Source: <a href="https://github.com/Raskiller503/aws-SAA-C03-quiz-Public">GitHub</a>
+    · 题库源 <a href="https://nicetd.github.io/saa-c03-quiz/">nicetd.github.io/saa-c03-quiz</a>
+  </p>
+</div>
 </body>
 </html>

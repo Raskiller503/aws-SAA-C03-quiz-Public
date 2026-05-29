@@ -7,11 +7,13 @@
 ```
 SAA03/
 ├── README.md                  ← 你现在看的这份
-├── index.html                 ← 跳转到刷题应用
+├── index.html                 ← 入口页(学习 / 刷题 两个入口)
+├── study.html                 ← 学习框架 单文件 HTML(双击即用)
 ├── quiz-app.html              ← 刷题 UI(与 CLF02 同一套代码)
 ├── questions.json             ← 1019 道题(双语)
 ├── questions.js               ← 同上,作为 <script> 直接加载
 ├── parse_questions.py         ← 从 source/raw_questions.json 重新生成
+├── gen_study_html.py          ← 把 学习框架/ 下 13 章 markdown 打包成 study.html
 ├── source/
 │   └── raw_questions.json    ← 从 nicetd.github.io 爬取的原始数据
 └── 学习框架/
@@ -89,13 +91,27 @@ SAA03/
 
 ---
 
-## 🛠️ 使用刷题应用
+## 🛠️ 使用方式
+
+### 方式 1:双击打开(file://)
+
+直接双击 `index.html`,然后选择"学习框架"或"刷题助手"。  
+`study.html` 是单文件 HTML,所有章节内容已内嵌,无需 web 服务器。
+
+### 方式 2:本地 web server(刷题需要)
 
 ```bash
 cd /Users/yutong.chen/AWS/SAA03
 python3 -m http.server 8000
-# 浏览器打开 http://localhost:8000/quiz-app.html
+# 浏览器打开 http://localhost:8000/
 ```
+
+`quiz-app.html` 需要从 `questions.json` 加载题库,**必须**通过 http server 才能 fetch。
+
+### 方式 3:GitHub Pages
+
+在 GitHub 仓库 Settings → Pages → Source 选 `main` 分支根目录,几分钟后访问  
+`https://raskiller503.github.io/aws-SAA-C03-quiz-Public/`
 
 刷题应用功能(继承 CLF02):
 - 顺序练习 / 随机练习 / 章节练习(每 50 题一组)
@@ -117,6 +133,14 @@ curl -sL "https://nicetd.github.io/saa-c03-quiz/data/questions.json" \
 
 # 2. 转换成本仓库 schema
 python3 parse_questions.py
+```
+
+## 🧱 重新生成 study.html
+
+修改了 `学习框架/*.md` 后,重新打包:
+
+```bash
+python3 gen_study_html.py
 ```
 
 ---
