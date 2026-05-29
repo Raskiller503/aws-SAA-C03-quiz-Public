@@ -135,12 +135,39 @@ def convert(q):
     }
 
 
+def load_existing_translations():
+    """Read the previous questions.json (if any) and index `comments_cn` by id
+    so we can preserve human-paid LLM translations when re-parsing from source."""
+    if not OUT_JSON.exists():
+        return {}
+    try:
+        with open(OUT_JSON, "r", encoding="utf-8") as f:
+            prev = json.load(f)
+    except Exception:
+        return {}
+    return {q["id"]: q.get("comments_cn") for q in prev if q.get("comments_cn")}
+
+
 def main():
     with open(SRC, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
+    # Preserve any previously-generated Chinese translations
+    existing_cn = load_existing_translations()
+
     out = [convert(q) for q in raw]
     out.sort(key=lambda x: x["id"])
+
+    # Merge existing translations back in, but only if comment count matches
+    # (if the English splits changed, the old translations no longer align).
+    kept = 0
+    for q in out:
+        prev_cn = existing_cn.get(q["id"])
+        if prev_cn and len(prev_cn) == len(q["comments"]):
+            q["comments_cn"] = prev_cn
+            kept += 1
+    if existing_cn:
+        print(f"  preserved {kept}/{len(existing_cn)} existing CN translations")
 
     # Stats
     no_cn = sum(1 for q in out if not q["cn_question"])

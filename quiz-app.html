@@ -275,6 +275,19 @@ body {
   margin-bottom: 8px; font-size: 14px; line-height: 1.7;
   border-left: 3px solid var(--aws-orange);
 }
+.comment-cn { color: var(--text); }
+.comment-en-toggle { margin-top: 8px; }
+.comment-en-toggle summary {
+  cursor: pointer; font-size: 12px; color: var(--text-secondary);
+  user-select: none; padding: 2px 0;
+}
+.comment-en-toggle summary:hover { color: var(--aws-orange); }
+.comment-en {
+  margin-top: 6px; padding: 8px 10px; background: rgba(0,0,0,0.03);
+  border-radius: 6px; font-size: 13px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+.dark .comment-en { background: rgba(255,255,255,0.04); }
 
 .quiz-actions {
   display: flex; gap: 12px; justify-content: space-between;
@@ -1509,12 +1522,22 @@ function showAnswerSection(q, selected) {
     voteEl.innerHTML = '';
   }
 
-  // Comments
+  // Comments — show CN translation on top, EN original collapsible below
   const commEl = document.getElementById('commentsSection');
   if (q.comments && q.comments.length > 0) {
-    commEl.innerHTML = '<h4>&#128172; 解题分析</h4>' + q.comments.map(c =>
-      `<div class="comment-item">${escHtml(c)}</div>`
-    ).join('');
+    const cn = q.comments_cn || [];
+    commEl.innerHTML = '<h4>&#128172; 解题分析</h4>' + q.comments.map((en, i) => {
+      const zh = cn[i];
+      if (zh) {
+        return `<div class="comment-item">
+          <div class="comment-cn">${escHtml(zh)}</div>
+          <details class="comment-en-toggle"><summary>EN 原文</summary>
+            <div class="comment-en">${escHtml(en)}</div>
+          </details>
+        </div>`;
+      }
+      return `<div class="comment-item">${escHtml(en)}</div>`;
+    }).join('');
   } else {
     commEl.innerHTML = '';
   }

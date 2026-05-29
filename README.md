@@ -144,6 +144,23 @@ python3 parse_questions.py
 python3 gen_study_html.py
 ```
 
+## 🇨🇳 翻译解析为中文
+
+上游数据本身只有英文 explanation。`translate_comments.py` 用 OpenAI API
+把每道题的 `comments` 批量翻译成中文,写入 `comments_cn` 字段。
+
+```bash
+OPENAI_API_KEY=sk-xxx python3 translate_comments.py
+# 可选参数:--workers 8 --model gpt-4o-mini --base-url https://jp.api.openai.com/v1
+```
+
+- 增量 + 可断点续传:跳过已译过的题,Ctrl-C 重跑不丢进度
+- 每 25 题自动 checkpoint
+- 完成后自动重生 `questions.js`
+- 1019 道题 × ~4 段 ≈ $1-3(gpt-4o-mini)/ 5-15 分钟(并发 6)
+
+`parse_questions.py` 会在重新解析时**保留**已译数据(只要英文 comments 段数没变)。
+
 ---
 
 ## 📝 字段对照(供后续维护参考)
