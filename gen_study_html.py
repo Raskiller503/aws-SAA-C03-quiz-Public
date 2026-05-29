@@ -17,7 +17,7 @@ ROOT = Path(__file__).parent
 SRC_DIR = ROOT / "学习框架"
 OUT = ROOT / "study.html"
 
-# Chapter ordering: filenames begin with 00-, 01-, ... 12-
+# Chapter ordering: filenames begin with 00-, 01-, ...
 def chapter_sort_key(p: Path):
     m = re.match(r"(\d+)", p.stem)
     return int(m.group(1)) if m else 999

@@ -13,7 +13,7 @@ SAA03/
 ├── questions.json             ← 1019 道题(双语)
 ├── questions.js               ← 同上,作为 <script> 直接加载
 ├── parse_questions.py         ← 从 source/raw_questions.json 重新生成
-├── gen_study_html.py          ← 把 学习框架/ 下 13 章 markdown 打包成 study.html
+├── gen_study_html.py          ← 把 学习框架/ 下所有 markdown 打包成 study.html
 ├── source/
 │   └── raw_questions.json    ← 从 nicetd.github.io 爬取的原始数据
 └── 学习框架/
@@ -29,7 +29,8 @@ SAA03/
     ├── 09-迁移与混合云.md
     ├── 10-成本优化.md
     ├── 11-Well-Architected五大支柱.md
-    └── 12-考前冲刺与答题套路.md
+    ├── 12-考前冲刺与答题套路.md
+    └── 13-专有词速查表.md
 ```
 
 ---
