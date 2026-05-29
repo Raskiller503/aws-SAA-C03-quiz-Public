@@ -1008,21 +1008,39 @@ async function init() {
   }
 }
 
+// 一次性清理：早期版本沿用 CLF02 的 storage key（clf02_*），
+// 同域下会被 SAA03 误读为"已有进度"。首次加载时把残留删掉。
+function purgeLegacyClf02Storage() {
+  if (localStorage.getItem('saa03_purged_clf02') === '1') return;
+  const legacyKeys = [
+    'clf02_progress', 'clf02_bookmarks', 'clf02_dark',
+    'clf02_sync_token', 'clf02_sync_gist_id', 'clf02_ai_apikey'
+  ];
+  for (const k of legacyKeys) localStorage.removeItem(k);
+  // 兜底：清除任何 clf02_ 前缀的键（防止以后再加了新键）
+  for (let i = localStorage.length - 1; i >= 0; i--) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('clf02_')) localStorage.removeItem(k);
+  }
+  localStorage.setItem('saa03_purged_clf02', '1');
+}
+
 function loadStorage() {
   try {
-    const p = localStorage.getItem('clf02_progress');
+    purgeLegacyClf02Storage();
+    const p = localStorage.getItem('saa03_progress');
     if (p) progress = JSON.parse(p);
-    const b = localStorage.getItem('clf02_bookmarks');
+    const b = localStorage.getItem('saa03_bookmarks');
     if (b) bookmarks = new Set(JSON.parse(b));
-    const d = localStorage.getItem('clf02_dark');
+    const d = localStorage.getItem('saa03_dark');
     if (d === 'true') { darkMode = true; document.body.classList.add('dark'); document.getElementById('darkBtn').innerHTML = '&#9788;'; }
   } catch(e) {}
 }
 
 function saveStorage() {
-  localStorage.setItem('clf02_progress', JSON.stringify(progress));
-  localStorage.setItem('clf02_bookmarks', JSON.stringify([...bookmarks]));
-  localStorage.setItem('clf02_dark', darkMode);
+  localStorage.setItem('saa03_progress', JSON.stringify(progress));
+  localStorage.setItem('saa03_bookmarks', JSON.stringify([...bookmarks]));
+  localStorage.setItem('saa03_dark', darkMode);
   // 自动云同步（防抖 3 秒）
   debounceSyncUp();
 }
@@ -1873,7 +1891,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `clf02-progress-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `saa03-progress-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
   closeDataModal();
@@ -1925,25 +1943,25 @@ function escHtml(s) {
 }
 
 // ===== Gist Cloud Sync =====
-const GIST_FILENAME = 'clf02-quiz-progress.json';
+const GIST_FILENAME = 'saa03-quiz-progress.json';
 
 function loadSyncConfig() {
   try {
-    syncToken = localStorage.getItem('clf02_sync_token') || '';
-    syncGistId = localStorage.getItem('clf02_sync_gist_id') || '';
+    syncToken = localStorage.getItem('saa03_sync_token') || '';
+    syncGistId = localStorage.getItem('saa03_sync_gist_id') || '';
   } catch(e) {}
 }
 
 function saveSyncConfig() {
-  localStorage.setItem('clf02_sync_token', syncToken);
-  localStorage.setItem('clf02_sync_gist_id', syncGistId);
+  localStorage.setItem('saa03_sync_token', syncToken);
+  localStorage.setItem('saa03_sync_gist_id', syncGistId);
 }
 
 function clearSyncConfig() {
   syncToken = '';
   syncGistId = '';
-  localStorage.removeItem('clf02_sync_token');
-  localStorage.removeItem('clf02_sync_gist_id');
+  localStorage.removeItem('saa03_sync_token');
+  localStorage.removeItem('saa03_sync_gist_id');
 }
 
 function updateSyncStatusUI() {
@@ -2064,9 +2082,9 @@ async function syncFromGist() {
 
 // Save to localStorage only (no sync trigger)
 function saveStorageLocal() {
-  localStorage.setItem('clf02_progress', JSON.stringify(progress));
-  localStorage.setItem('clf02_bookmarks', JSON.stringify([...bookmarks]));
-  localStorage.setItem('clf02_dark', darkMode);
+  localStorage.setItem('saa03_progress', JSON.stringify(progress));
+  localStorage.setItem('saa03_bookmarks', JSON.stringify([...bookmarks]));
+  localStorage.setItem('saa03_dark', darkMode);
 }
 
 async function validateToken(token) {
@@ -2210,12 +2228,12 @@ let aiApiKey = '';
 
 function loadAIConfig() {
   try {
-    aiApiKey = localStorage.getItem('clf02_ai_apikey') || '';
+    aiApiKey = localStorage.getItem('saa03_ai_apikey') || '';
   } catch(e) {}
 }
 
 function saveAIConfig() {
-  localStorage.setItem('clf02_ai_apikey', aiApiKey);
+  localStorage.setItem('saa03_ai_apikey', aiApiKey);
 }
 
 function showAIModal() {
